@@ -7,7 +7,6 @@ class EnterprisesController < ApplicationController
 
   #GET filter by id
   def show
-    enterprise
     render json: enterprise
   end
 
@@ -19,7 +18,7 @@ class EnterprisesController < ApplicationController
     end
   end
 
-  #PATCH update register
+  #PUT update register
   def update    
     if enterprise.update(enterprise_params)
       render json: enterprise

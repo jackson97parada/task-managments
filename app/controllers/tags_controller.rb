@@ -8,7 +8,6 @@ class TagsController < ApplicationController
   
   #GET filter by id
   def show
-    tag
     render json: tag
   end
 
@@ -23,7 +22,7 @@ class TagsController < ApplicationController
   #PUT update register
   def update
     if tag.update(tag_params)    
-      render json: tag
+      render json: tag    
     end
   end
 

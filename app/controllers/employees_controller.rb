@@ -8,7 +8,6 @@ class EmployeesController < ApplicationController
 
   #POST filter by id
   def show
-    employee
     render json: employee
   end
 
@@ -22,8 +21,9 @@ class EmployeesController < ApplicationController
 
   #PUT updated regristration
   def update
-    @employee = Employee.update(employee_params)
-    render json: @employee
+    if employee.update(employee_params)
+      render json: employee
+    end
   end
 
   #PUT updated status
