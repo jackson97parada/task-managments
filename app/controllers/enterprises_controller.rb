@@ -14,7 +14,7 @@ class EnterprisesController < ApplicationController
   def create
     @enterprise = Enterprise.new(enterprise_params)
     if @enterprise.save
-      render json: @enterprise
+      render json: @enterprise, status: :created 
     end
   end
 
@@ -27,7 +27,9 @@ class EnterprisesController < ApplicationController
 
   #PUT updated status
   def update_enabled
-    enterprise.update(enable: !enterprise.enable)
+    if enterprise.update(enable: !enterprise.enable)
+      render json: enterprise
+    end
   end
 
   #DELETE delete register

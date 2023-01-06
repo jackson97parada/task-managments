@@ -6,7 +6,7 @@ class EmployeesController < ApplicationController
     render json: @employees
   end
 
-  #POST filter by id
+  #GET filter by id
   def show
     render json: employee
   end
@@ -15,7 +15,7 @@ class EmployeesController < ApplicationController
   def create
     @employee = Employee.new(employee_params)
     if @employee.save
-      render json: @employee
+      render json: @employee, status: :created
     end
   end
 
@@ -28,8 +28,9 @@ class EmployeesController < ApplicationController
 
   #PUT updated status
   def update_enabled
-    employee.update(enable: !employee.enable)
-    render json: employee
+    if employee.update(enable: !employee.enable)
+      render json: employee
+    end
   end
 
   #DELETE delete a regristration

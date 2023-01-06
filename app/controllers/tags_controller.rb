@@ -15,7 +15,7 @@ class TagsController < ApplicationController
   def create
     @tag = Tag.new(tag_params)
     if @tag.save
-      render json: @tag
+      render json: @tag, status: :created
     end
   end
 
@@ -28,8 +28,9 @@ class TagsController < ApplicationController
 
   #PUT update status
   def update_enabled    
-    tag.update(enable: !tag.enable)
-    render json: tag
+    if tag.update(enable: !tag.enable)
+      render json: tag
+    end
   end
 
   #DELETE delete register
