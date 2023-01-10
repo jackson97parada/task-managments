@@ -1,5 +1,5 @@
-# module ResponseHelper do
-#   def response_body
-#     JSON.parse(response.body)
-#   end
-# end
+module ResponseHelper
+  def response_body
+    JSON.parse(response.body)
+  end
+end
