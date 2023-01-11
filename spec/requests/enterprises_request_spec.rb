@@ -41,6 +41,77 @@ RSpec.describe "Enterprises Request", type: :request do
     end
   end
 
+  #Test for POST /enterprises for create enterprises
+  describe "POST /enterprises" do
+    let(:valid_attributes) { { enterprise: { nit: "202020", address: "san lukas", mobile: "12321" } } }
+    before { post "/enterprises", params: valid_attributes }
+
+    context "When the request is valid" do
+      it "return nit" do
+        expect(response_body["nit"]).to eq("202020")
+      end
+      
+      it "return status code 201" do
+        expect(response.status).to eq(201)
+      end
+    end
+
+    context "When the request is valid" do
+      let(:valid_attributes) { { enterprise: { nit: "" } } }
+      before { post "/enterprises", params: valid_attributes }
+      it "return status code 422" do
+        expect(response.status).to eq(422)
+      end
+    end
+  end
+
+  describe "PUT /enterprises/:id" do
+    let(:valid_attributes) { { enterprise: { nit: "222222" } } }
+    before { put "/enterprises/#{enterprise_id}", params: valid_attributes }
+    
+    context "When the request is valid" do
+      
+      it "return nit" do
+        expect(response_body["nit"]).to eq("222222")
+      end
+
+      it "return status code 200" do
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context "When the request is invalid" do
+      let(:valid_attributes) { { enterprise: { nit: "" } } }
+      before { put "/enterprises/#{enterprise_id}", params: valid_attributes }
+
+      it "return status code 422" do
+        expect(response.status).to eq(422)
+      end
+    end
+  end
+
+  describe "PUT /enterprises/:id/update_enabled" do
+    before { put "/enterprises/#{enterprise_id}/update_enabled" }
+
+    context "When the enterprise exist" do
+      it "return the id" do
+        expect(response_body['id']).to eq(enterprise_id)
+      end
+
+      it "return status code 200" do
+        expect(response.status).to eq(200)
+      end
+    end
+    # binding.break
+    context "When the enterprise does not exist" do
+      let(:enterprise_id) { -1 }
+
+      it "return status code 404" do
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
   # This test is for the DELETE '/route/:id' endpoint
   describe 'DELETE /enterprises/:id' do
     # Execute the DELETE request before running the test
@@ -51,4 +122,5 @@ RSpec.describe "Enterprises Request", type: :request do
       expect(response.status).to eq(204)
     end
   end
+
 end

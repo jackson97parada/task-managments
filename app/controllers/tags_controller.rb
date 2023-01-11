@@ -16,13 +16,17 @@ class TagsController < ApplicationController
     @tag = Tag.new(tag_params)
     if @tag.save
       render json: @tag, status: :created
+    else
+      render json: @tag.errors, status: :unprocessable_entity #422
     end
   end
 
   #PUT update register
   def update
     if tag.update(tag_params)    
-      render json: tag    
+      render json: tag  
+    else
+      render json: tag.errors, status: :unprocessable_entity  
     end
   end
 

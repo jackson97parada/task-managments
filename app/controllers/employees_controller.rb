@@ -16,6 +16,8 @@ class EmployeesController < ApplicationController
     @employee = Employee.new(employee_params)
     if @employee.save
       render json: @employee, status: :created
+    else
+      render json: @employee.errors, status: :unprocessable_entity
     end
   end
 
@@ -23,6 +25,8 @@ class EmployeesController < ApplicationController
   def update
     if employee.update(employee_params)
       render json: employee
+    else
+      render json: employee.errors, status: :unprocessable_entity
     end
   end
 

@@ -15,6 +15,8 @@ class EnterprisesController < ApplicationController
     @enterprise = Enterprise.new(enterprise_params)
     if @enterprise.save
       render json: @enterprise, status: :created 
+    else
+      render json: @enterprise.errors, status: :unprocessable_entity #422
     end
   end
 
@@ -22,6 +24,8 @@ class EnterprisesController < ApplicationController
   def update    
     if enterprise.update(enterprise_params)
       render json: enterprise
+    else
+      render json: enterprise.errors, status: :unprocessable_entity
     end  
   end
 
