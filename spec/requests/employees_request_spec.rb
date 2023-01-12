@@ -39,7 +39,7 @@ RSpec.describe "Employees Request", type: :request do
   end
 
   describe "POST /employees" do
-    let(:valid_attributes) { { employee: { name: "test", last_name: "test2", document: "222222", mobile: "111111", salary: "12.12" } } }
+    let(:valid_attributes) { { employee: { name: "test", last_name: "test2", document: "222222", mobile: "111111", salary: 12.12 } } }
     before { post "/employees", params: valid_attributes }
 
     context "When the request is valid" do
