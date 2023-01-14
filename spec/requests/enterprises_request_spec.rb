@@ -5,6 +5,7 @@ RSpec.describe "Enterprises Request", type: :request do
   #given
   let!(:enterprises) { create_list(:enterprise, 3) }
   let(:enterprise_id) { enterprises.first.id }
+
   describe "GET /enterprises" do
     #when
     before { get '/enterprises' }
@@ -19,12 +20,22 @@ RSpec.describe "Enterprises Request", type: :request do
     end
   end
 
+  describe "GET /enterprises/:params" do
+    let(:params) { enterprises.first.nit }
+
+    before { get "/enterprises", params: { nit: params } }
+
+    it "return nit" do
+      expect(response_body[0]['attributes']['nit']).to eq(params)
+    end
+  end
+
   describe "GET /enterprises/:id" do
     before  { get "/enterprises/#{enterprise_id}" }
 
     context "When the enterprise exist" do
       it "return the id" do
-        expect(response_body['id']).to eq(enterprise_id)
+        expect(response_body['attributes']['id']).to eq(enterprise_id)
       end
 
       it "return status code 200" do
@@ -48,7 +59,7 @@ RSpec.describe "Enterprises Request", type: :request do
 
     context "When the request is valid" do
       it "return nit" do
-        expect(response_body["nit"]).to eq("202020")
+        expect(response_body['attributes']["nit"]).to eq("202020")
       end
       
       it "return status code 201" do
@@ -72,7 +83,7 @@ RSpec.describe "Enterprises Request", type: :request do
     context "When the request is valid" do
       
       it "return nit" do
-        expect(response_body["nit"]).to eq("222222")
+        expect(response_body['attributes']["nit"]).to eq("222222")
       end
 
       it "return status code 200" do
@@ -95,7 +106,7 @@ RSpec.describe "Enterprises Request", type: :request do
 
     context "When the enterprise exist" do
       it "return the id" do
-        expect(response_body['id']).to eq(enterprise_id)
+        expect(response_body['attributes']['id']).to eq(enterprise_id)
       end
 
       it "return status code 200" do

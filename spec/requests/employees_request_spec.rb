@@ -20,8 +20,8 @@ RSpec.describe "Employees Request", type: :request do
     before  { get "/employees/#{employee_id}" }
 
     context "When the employee exist" do
-      it "return the id" do
-        expect(response_body['id']).to eq(employee_id)
+      it "return the id" do        
+        expect(response_body['attributes']['id']).to eq(employee_id)
       end
 
       it "return status code 200" do
@@ -45,7 +45,7 @@ RSpec.describe "Employees Request", type: :request do
     context "When the request is valid" do
       
       it "return name" do
-        expect(response_body["name"]).to eq("test")
+        expect(response_body['attributes']["name"]).to eq("test")
       end
 
       it "return status code 201" do
@@ -70,7 +70,7 @@ RSpec.describe "Employees Request", type: :request do
     context "When the request is valid" do
       
       it "return name" do
-        expect(response_body["name"]).to eq("testing")
+        expect(response_body['attributes']["name"]).to eq("testing")
       end
 
       it "return status code 200" do
@@ -94,7 +94,7 @@ RSpec.describe "Employees Request", type: :request do
 
     context "When the employee exist" do
       it "return the id" do
-        expect(response_body['id']).to eq(employee_id)
+        expect(response_body['attributes']['id']).to eq(employee_id)
       end
 
       it "return status code 200" do

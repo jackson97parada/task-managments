@@ -15,5 +15,11 @@ Rails.application.routes.draw do
     collection do
       put '/:id/update_enabled', to: 'employees#update_enabled'
     end
-  end  
+  end
+  
+  resources :tasks do
+    collection do
+      put '/:id/update_enabled', to: 'tasks#update_enabled'
+    end
+  end
 end

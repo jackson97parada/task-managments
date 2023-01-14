@@ -16,12 +16,21 @@ RSpec.describe "Tags Request", type: :request do
     end
   end
 
+  describe "GET /tags/:params" do
+    let(:params) { tags.first.name }
+    before { get "/tags", params: { name: params } }
+
+    it "return name" do
+      expect(response_body[0]['attributes']['name']).to eq(params)
+    end
+  end
+
   describe "GET /tags/:id" do
     before  { get "/tags/#{tag_id}" }
 
     context "When the tag exist" do
       it "return the id" do
-        expect(response_body['id']).to eq(tag_id)
+        expect(response_body['attributes']['id']).to eq(tag_id)
       end
 
       it "return status code 200" do
@@ -44,7 +53,7 @@ RSpec.describe "Tags Request", type: :request do
 
     context "When the request is valid" do
       it "return name" do
-        expect(response_body["name"]).to eq("test")
+        expect(response_body['attributes']["name"]).to eq("test")
       end
 
       it "return status code 201" do
@@ -68,7 +77,7 @@ RSpec.describe "Tags Request", type: :request do
     context "When the request is valid" do
       
       it "return name" do
-        expect(response_body["name"]).to eq("testing")
+        expect(response_body['attributes']["name"]).to eq("testing")
       end
 
       it "return status code 200" do
@@ -91,7 +100,7 @@ RSpec.describe "Tags Request", type: :request do
 
     context "When the tag exist" do
       it "return the id" do
-        expect(response_body['id']).to eq(tag_id)
+        expect(response_body['attributes']['id']).to eq(tag_id)
       end
 
       it "return status code 200" do

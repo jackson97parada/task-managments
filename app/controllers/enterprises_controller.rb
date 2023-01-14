@@ -2,19 +2,19 @@ class EnterprisesController < ApplicationController
   # GET all
   def index
     @enterprises = Enterprise.paginate(page: params[:page], per_page: 30)
-    render json: @enterprises
+    render json: serializer(@enterprises)
   end
 
   #GET filter by id
   def show
-    render json: enterprise
+    render json: serializer(enterprise)
   end
 
   #POST create register
   def create
     @enterprise = Enterprise.new(enterprise_params)
     if @enterprise.save
-      render json: @enterprise, status: :created 
+      render json: serializer(@enterprise), status: :created 
     else
       render json: @enterprise.errors, status: :unprocessable_entity #422
     end
@@ -23,7 +23,7 @@ class EnterprisesController < ApplicationController
   #PUT update register
   def update    
     if enterprise.update(enterprise_params)
-      render json: enterprise
+      render json: serializer(enterprise)
     else
       render json: enterprise.errors, status: :unprocessable_entity
     end  
@@ -32,7 +32,7 @@ class EnterprisesController < ApplicationController
   #PUT updated status
   def update_enabled
     if enterprise.update(enable: !enterprise.enable)
-      render json: enterprise
+      render json: serializer(enterprise)
     end
   end
 
@@ -51,5 +51,9 @@ class EnterprisesController < ApplicationController
   #function private
   def enterprise
     Enterprise.find(params[:id])
+  end
+
+  def serializer(object)
+    EnterpriseSerializer.new(object).serializable_hash.to_json
   end
 end

@@ -3,19 +3,19 @@ class EmployeesController < ApplicationController
   #GET all
   def index
     @employees = Employee.all
-    render json: @employees
+    render json: serializer(@employees)
   end
 
   #GET filter by id
   def show
-    render json: employee
+    render json: serializer(employee)
   end
 
   #POST create registration
   def create
     @employee = Employee.new(employee_params)
     if @employee.save
-      render json: @employee, status: :created
+      render json: serializer(@employee), status: :created
     else
       render json: @employee.errors, status: :unprocessable_entity
     end
@@ -24,7 +24,7 @@ class EmployeesController < ApplicationController
   #PUT updated regristration
   def update
     if employee.update(employee_params)
-      render json: employee
+      render json: serializer(employee)
     else
       render json: employee.errors, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class EmployeesController < ApplicationController
   #PUT updated status
   def update_enabled
     if employee.update(enable: !employee.enable)
-      render json: employee
+      render json: serializer(employee)
     end
   end
 
@@ -53,4 +53,9 @@ class EmployeesController < ApplicationController
   def employee
     Employee.find(params[:id])
   end
+
+  def serializer(object)
+    EmployeeSerializer.new(object).serializable_hash.to_json
+  end
+  
 end
