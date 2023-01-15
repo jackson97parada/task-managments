@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Employee, type: :model do
+
+  describe 'associations' do
+    it { should have_many(:task) }
+  end
+
   describe 'validations' do
     subject { build(:employee) }
 

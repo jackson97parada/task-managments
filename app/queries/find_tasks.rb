@@ -21,9 +21,8 @@ class FindTasks
   
 end
 
-# Crear serializer para cada modelo z
-#  Filtros para todos los modelos x
-# Crear test de los request con los parametros el metodo index x
 
-# Crear una relacion many to many entre employee y task x
+
+#  Filtros para todos los modelos x
+
 

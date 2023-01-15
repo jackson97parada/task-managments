@@ -22,4 +22,6 @@ Rails.application.routes.draw do
       put '/:id/update_enabled', to: 'tasks#update_enabled'
     end
   end
+
+  resources :tasks_employees
 end
