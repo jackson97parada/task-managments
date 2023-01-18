@@ -24,4 +24,6 @@ Rails.application.routes.draw do
   end
 
   resources :tasks_employees
+
+  resources :users, only: %i[create]
 end

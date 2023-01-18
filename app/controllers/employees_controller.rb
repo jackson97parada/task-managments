@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  
+  # before_action :employee, only: %i(update)
   #GET all
   def index
     @employees = Employee.all

@@ -7,7 +7,7 @@ RSpec.describe Task, type: :model do
 
   describe 'association' do
     it { should belong_to(:tag) }
-    it { should have_many(:employee) }
+    it { should have_many(:employees).through(:task_assignments) }
   end
 
   describe 'validations' do

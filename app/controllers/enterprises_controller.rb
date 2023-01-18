@@ -1,7 +1,8 @@
 class EnterprisesController < ApplicationController
   # GET all
   def index
-    @enterprises = Enterprise.paginate(page: params[:page], per_page: 30)
+    @enterprises = 
+    FindEnterprise.new.call(params).page(params[:page]).per(params[:per_page])
     render json: serializer(@enterprises)
   end
 

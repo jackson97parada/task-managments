@@ -111,7 +111,7 @@ RSpec.describe "Tasks request", type: :request do
 
   describe "DELETE /tasks/:id" do
     before { delete "/tasks/#{task_id}" }
-
+    
     it "return status code 204" do
       expect(response.status).to eq(204)
     end

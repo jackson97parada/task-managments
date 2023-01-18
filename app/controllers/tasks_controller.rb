@@ -1,7 +1,8 @@
 class TasksController < ApplicationController
 
   def index
-    @tasks = Task.all
+    @tasks = 
+    FindTasks.new.call(params).page(params[:page]).per(params[:per_page])
     render json: serializer(@tasks)
   end
 
@@ -39,7 +40,13 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :start_date, :end_date, :tag_id)
+    params.require(:task).permit(
+      :title, 
+      :description, 
+      :start_date, 
+      :end_date, 
+      :tag_id,
+      employees_attributes: [:id])
   end
 
   def task
