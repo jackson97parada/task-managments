@@ -12,6 +12,7 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -52,11 +53,11 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   #Use for variables enviroments
   gem 'dotenv-rails'
-  
+
   #Use for build objects
   gem 'factory_bot_rails'
 
-  #Use for generated factories of data faker 
+  #Use for generated factories of data faker
   gem 'faker'
 end
 
@@ -64,15 +65,11 @@ group :test do
   #Use for unit tests
   gem 'rspec-rails'
 
-  
-
   #Use for matchers expected
   gem 'shoulda-matchers'
 end
-
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-

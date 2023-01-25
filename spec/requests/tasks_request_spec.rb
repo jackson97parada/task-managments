@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe "Tasks request", type: :request do
+  let(:user) { create(:user) }
+  let(:headers) { valid_headers }
   let!(:tag) { create(:tag) }
   let!(:tasks) { create_list(:task, 3, tag_id: tag.id) }
   let(:task_id) { tasks.first.id }
 
   describe "GET /tasks" do
-    before { get "/tasks" }
+    before { get "/api/v1/tasks", headers: headers }
 
     it "return all tasks" do
       expect(response_body.size).to eq(3)
@@ -19,7 +21,7 @@ RSpec.describe "Tasks request", type: :request do
 
   describe "GET /tasks/:params" do
     let(:params) { tasks.first.title }
-    before { get "/tasks", params: { title: params } }
+    before { get "/api/v1/tasks", params: { title: params }, headers: headers }
 
     it "return title" do
       expect(response_body[0]['attributes']['title']).to eq(params)
@@ -27,10 +29,10 @@ RSpec.describe "Tasks request", type: :request do
   end
 
   describe "GET /tasks/:id" do
-    before { get "/tasks/#{task_id}" }
+    before { get "/api/v1/tasks/#{task_id}", headers: headers }
 
     context "When the task exist" do
-      
+
       it "return id" do
         expect(response_body['attributes']['id']).to eq(task_id)
       end
@@ -50,11 +52,11 @@ RSpec.describe "Tasks request", type: :request do
   end
 
   describe "POST /tasks" do
-    let(:valid_attributes) { { task: { title: "new task", start_date: Date.today, end_date: Date.today + 10.day, tag_id: tag.id } } }
-    before { post "/tasks", params: valid_attributes }
+    let(:valid_attributes) { { title: "new task", start_date: Date.today, end_date: Date.today + 10.day, tag_id: tag.id }.to_json }
+    before { post "/api/v1/tasks", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
-      
+
       it "return title" do
         expect(response_body['attributes']["title"]).to eq("new task")
       end
@@ -62,11 +64,11 @@ RSpec.describe "Tasks request", type: :request do
   end
 
   describe "PUT /tasks/:id" do
-    let(:valid_attributes) { { task: { title: "update task" } } }
-    before { put "/tasks/#{task_id}", params: valid_attributes }
+    let(:valid_attributes) { { title: "update task" }.to_json }
+    before { put "/api/v1/tasks/#{task_id}", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
-      
+
       it "return title" do
         expect(response_body['attributes']["title"]).to eq("update task")
       end
@@ -77,8 +79,8 @@ RSpec.describe "Tasks request", type: :request do
     end
 
     context "When the request is invalid" do
-      let(:valid_attributes) { { task: { title: "" } } }
-      before { put "/tasks/#{task_id}", params: valid_attributes }
+      let(:valid_attributes) { { title: "" }.to_json }
+      before { put "/api/v1/tasks/#{task_id}", params: valid_attributes, headers: headers }
 
       it "return status code 422" do
         expect(response.status).to eq(422)
@@ -87,10 +89,10 @@ RSpec.describe "Tasks request", type: :request do
   end
 
   describe "PUT /tasks/:id/update_enabled" do
-    before { put "/tasks/#{task_id}/update_enabled" }
+    before { put "/api/v1/tasks/#{task_id}/update_enabled", headers: headers }
 
     context "When the task exist" do
-      
+
       it "return id" do
         expect(response_body['attributes']['id']).to eq(task_id)
       end
@@ -110,8 +112,8 @@ RSpec.describe "Tasks request", type: :request do
   end
 
   describe "DELETE /tasks/:id" do
-    before { delete "/tasks/#{task_id}" }
-    
+    before { delete "/api/v1/tasks/#{task_id}", headers: headers }
+
     it "return status code 204" do
       expect(response.status).to eq(204)
     end

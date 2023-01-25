@@ -1,8 +1,8 @@
 class EnterprisesController < ApplicationController
   # GET all
   def index
-    @enterprises = 
-    FindEnterprise.new.call(params).page(params[:page]).per(params[:per_page])
+    @enterprises =
+    FindEnterprises.new.call(params).page(params[:page]).per(params[:per_page])
     render json: serializer(@enterprises)
   end
 
@@ -15,19 +15,19 @@ class EnterprisesController < ApplicationController
   def create
     @enterprise = Enterprise.new(enterprise_params)
     if @enterprise.save
-      render json: serializer(@enterprise), status: :created 
+      render json: serializer(@enterprise), status: :created
     else
       render json: @enterprise.errors, status: :unprocessable_entity #422
     end
   end
 
   #PUT update register
-  def update    
+  def update
     if enterprise.update(enterprise_params)
       render json: serializer(enterprise)
     else
       render json: enterprise.errors, status: :unprocessable_entity
-    end  
+    end
   end
 
   #PUT updated status

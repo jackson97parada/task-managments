@@ -57,5 +57,5 @@ class EmployeesController < ApplicationController
   def serializer(object)
     EmployeeSerializer.new(object).serializable_hash.to_json
   end
-  
+
 end

@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe "Tags Request", type: :request do
+  let(:user) { create(:user) }
+  let(:headers) { valid_headers}
   let!(:tags) { create_list(:tag, 3) }
   let(:tag_id) { tags.first.id }
 
   describe "GET /tags" do
-    before { get '/tags' }
+    before { get '/tags', headers: headers }
 
-    it "returns all tags" do      
+    it "returns all tags" do
       expect(response_body.size).to eq(3)
     end
 
@@ -18,7 +20,7 @@ RSpec.describe "Tags Request", type: :request do
 
   describe "GET /tags/:params" do
     let(:params) { tags.first.name }
-    before { get "/tags", params: { name: params } }
+    before { get "/tags", params: { name: params }, headers: headers }
 
     it "return name" do
       expect(response_body[0]['attributes']['name']).to eq(params)
@@ -26,7 +28,7 @@ RSpec.describe "Tags Request", type: :request do
   end
 
   describe "GET /tags/:id" do
-    before  { get "/tags/#{tag_id}" }
+    before  { get "/tags/#{tag_id}", headers: headers }
 
     context "When the tag exist" do
       it "return the id" do
@@ -48,8 +50,8 @@ RSpec.describe "Tags Request", type: :request do
   end
 
   describe "POST /tags" do
-    let(:valid_attributes) { { tag: { name: "test", color: "#0000" } } }
-    before { post "/tags", params: valid_attributes }
+    let(:valid_attributes) { { name: "test", color: "#0000" }.to_json }
+    before { post "/tags", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
       it "return name" do
@@ -62,8 +64,8 @@ RSpec.describe "Tags Request", type: :request do
     end
 
     context "When the request is invalid" do
-      let(:valid_attributes) { { tag: { name: "" } } }
-      before { post "/tags", params: valid_attributes }
+      let(:valid_attributes) { { name: "" }.to_json }
+      before { post "/tags", params: valid_attributes, headers: headers }
       it "return status code 422" do
         expect(response.status).to eq(422)
       end
@@ -71,11 +73,11 @@ RSpec.describe "Tags Request", type: :request do
   end
 
   describe "PUT /tags/:id" do
-    let(:valid_attributes) { { tag: { name: "testing" } } }
-    before { put "/tags/#{tag_id}", params: valid_attributes }
+    let(:valid_attributes) { { name: "testing" }.to_json }
+    before { put "/tags/#{tag_id}", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
-      
+
       it "return name" do
         expect(response_body['attributes']["name"]).to eq("testing")
       end
@@ -86,8 +88,8 @@ RSpec.describe "Tags Request", type: :request do
     end
 
     context "When the request is invalid" do
-      let(:valid_attributes) { { tag: { name: "" } } }
-      before { put "/tags/#{tag_id}", params: valid_attributes }
+      let(:valid_attributes) { { name: "" }.to_json }
+      before { put "/tags/#{tag_id}", params: valid_attributes, headers: headers }
 
       it "return status code 422" do
         expect(response.status).to eq(422)
@@ -96,7 +98,7 @@ RSpec.describe "Tags Request", type: :request do
   end
 
   describe "PUT /tags/:id/update_enabled" do
-    before { put "/tags/#{tag_id}/update_enabled" }
+    before { put "/tags/#{tag_id}/update_enabled", headers: headers }
 
     context "When the tag exist" do
       it "return the id" do
@@ -119,7 +121,7 @@ RSpec.describe "Tags Request", type: :request do
   # This test is for the DELETE '/route/:id' endpoint
   describe 'DELETE /tags/:id' do
     # Execute the DELETE request before running the test
-    before { delete "/tags/#{tag_id}" }
+    before { delete "/tags/#{tag_id}", headers: headers }
 
     # Test that the response has a HTTP status code of 204
     it 'returns status code 204' do

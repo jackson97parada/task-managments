@@ -1,4 +1,4 @@
-class FindEnterprise
+class FindEnterprises
   attr_reader :enterprises
 
   def initialize(enterprises = initial_scope)
@@ -34,14 +34,14 @@ class FindEnterprise
 
   def find_by_mobile(scoped, mobile)
     return scoped unless mobile
-    
+
     scoped.where("mobile like ?", mobile)
   end
 
   def find_by_enable(scoped, enable)
     return scoped unless enable
 
-    scoped.where(enable: enable)    
+    scoped.where(enable: enable)
   end
 
   def sort(scoped, order_by)
