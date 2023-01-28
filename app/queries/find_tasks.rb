@@ -10,8 +10,9 @@ class FindTasks
     scoped = find_by_title(scoped, params[:title])
     scoped = find_by_start_date(scoped, params[:start_date])
     scoped = find_by_end_date(scoped, params[:end_date])
+    scoped = find_by_range_dates(scoped, params[:start_date], params[:end_date])
     scoped = find_by_status(scoped, params[:status])
-    scoped = find_by_reference(scoped, params[:tag])
+    scoped = find_by_tag_id(scoped, params[:tag])
     sort(scoped, params[:order_by])
   end
 
@@ -22,8 +23,8 @@ class FindTasks
   end
 
   def find_by_title(scoped, title)
-    return scoped unless title 
-    
+    return scoped unless title
+
     scoped.where("title like ?", title)
   end
 
@@ -35,17 +36,23 @@ class FindTasks
 
   def find_by_end_date(scoped, end_date)
     return scoped unless end_date
-    
+
     scoped.where("end_date like ?", end_date)
+  end
+
+  def find_by_range_dates(scoped, start_date, end_date)
+    return scoped unless start_date, end_date
+
+    scoped.where("start_date >= ? AND end_date <= ?", start_date, end_date)
   end
 
   def find_by_status(scoped, status)
     return scoped unless status
-    
+
     scoped.where(status: enabled)
   end
 
-  def find_by_reference(scoped, tag)
+  def find_by_tag_id(scoped, tag)
     return scoped unless tag
 
     scoped.where("tag_id like ?", tag)
@@ -56,7 +63,7 @@ class FindTasks
 
     scoped.order("id #{order_by}")
   end
-  
+
 end
 
 
