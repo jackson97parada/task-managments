@@ -55,7 +55,8 @@ RSpec.describe "Enterprises Request", type: :request do
 
   #Test for POST /enterprises for create enterprises
   describe "POST /enterprises" do
-    let(:valid_attributes) { { nit: "202020", address: "san lukas", mobile: "12321" }.to_json }
+    let(:valid_attributes) { { nit: "202020", address: "san lukas", mobile: "12321",
+      user_id: user.id }.to_json }
     before { post "/enterprises", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do

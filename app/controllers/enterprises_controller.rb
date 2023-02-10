@@ -46,7 +46,7 @@ class EnterprisesController < ApplicationController
 
   #function private
   def enterprise_params
-    params.require(:enterprise).permit(:nit, :address, :mobile)
+    params.require(:enterprise).permit(:nit, :address, :mobile, :user_id)
   end
 
   #function private

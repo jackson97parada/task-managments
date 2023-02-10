@@ -1,11 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe "Tasks request", type: :request do
-  let(:user) { create(:user) }
+  let(:role) { create(:role) }
+  let(:permissions) { %w[ view_task create_task update_task update_enabled_task destroy_task ] }
+  let(:user) { create(:user, :with_role, role_name: role.name) }
   let(:headers) { valid_headers }
   let!(:tag) { create(:tag) }
   let!(:tasks) { create_list(:task, 3, tag_id: tag.id) }
   let(:task_id) { tasks.first.id }
+
+  before do
+    permissions.each do |permission|
+      create(:permission_role, role_id: role.id, permission: permission)
+    end
+  end
 
   describe "GET /tasks" do
     before { get "/api/v1/tasks", headers: headers }

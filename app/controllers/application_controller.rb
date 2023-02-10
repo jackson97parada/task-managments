@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
   include ExceptionHandler
+  include Pundit::Authorization
+
 
   before_action :authorize_request
   attr_reader :current_user

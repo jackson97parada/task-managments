@@ -15,6 +15,7 @@ module ExceptionHandler
     rescue_from ExceptionHandler::AuthenticationError, with: :record_unauthorized_request
     rescue_from ExceptionHandler::MissingToken, with: :record_unprocessable_entity
     rescue_from ExceptionHandler::InvalidToken, with: :record_unprocessable_entity
+    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
     private
 
@@ -28,6 +29,12 @@ module ExceptionHandler
 
     def record_unprocessable_entity(e)
       render json: { message: e.message }, status: :unprocessable_entity
+    end
+
+    def user_not_authorized
+      render json: {
+        message: "You are not authorized to perform this action"
+      }, status: :unauthorized
     end
   end
 end

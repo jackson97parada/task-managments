@@ -5,6 +5,7 @@ module Api
       def index
         @tasks =
         FindTasks.new.call(params).page(params[:page]).per(params[:per_page])
+        authorize @tasks
         render json: serializer(@tasks)
       end
 
