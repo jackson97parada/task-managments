@@ -1,4 +1,4 @@
-class FindEmployee
+class FindEmployees
   attr_reader :employees
 
   def initialize(employees = initial_scope)
@@ -42,7 +42,7 @@ class FindEmployee
 
   def find_by_mobile(scoped, mobile)
     return scoped unless mobile
-    
+
     scoped.where("mobile like ?", mobile)
   end
 

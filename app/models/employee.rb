@@ -1,7 +1,8 @@
 class Employee < ApplicationRecord
+  belongs_to :user
 
   has_many :task_assignments
-  has_many :tasks, through: :task_assignments 
+  has_many :tasks, through: :task_assignments
 
   validates :name, presence: true
   validates :last_name, presence: true

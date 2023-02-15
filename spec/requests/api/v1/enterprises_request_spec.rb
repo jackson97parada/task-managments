@@ -2,15 +2,23 @@ require 'rails_helper'
 
 RSpec.describe "Enterprises Request", type: :request do
   #given
-  let(:user) { create(:user) }
+  let(:role) { create(:role) }
+  let(:permissions) { %w[ view_enterprise create_enterprise update_enterprise destroy_enterprise ] }
+  let(:user) { create(:user, :with_role, role_name: role.name) }
   let(:headers) { valid_headers }
   let!(:enterprises) { create_list(:enterprise, 3) }
   let(:enterprise_id) { enterprises.first.id }
 
+  before do
+    permissions.each do |permission|
+      create(:permission_role, role_id: role.id, permission: permission)
+    end
+  end
+
   describe "GET /enterprises" do
     #when
 
-    before { get '/enterprises', headers: headers }
+    before { get '/api/v1/enterprises', headers: headers }
     it "returns all enterprises" do
       #Then
       expect(response_body.size).to eq(3)
@@ -24,7 +32,7 @@ RSpec.describe "Enterprises Request", type: :request do
   describe "GET /enterprises/:params" do
     let(:params) { enterprises.first.nit }
 
-    before { get "/enterprises", params: { nit: params }, headers: headers }
+    before { get "/api/v1/enterprises", params: { nit: params }, headers: headers }
 
     it "return nit" do
       expect(response_body[0]['attributes']['nit']).to eq(params)
@@ -32,7 +40,7 @@ RSpec.describe "Enterprises Request", type: :request do
   end
 
   describe "GET /enterprises/:id" do
-    before  { get "/enterprises/#{enterprise_id}", headers: headers }
+    before  { get "/api/v1/enterprises/#{enterprise_id}", headers: headers }
 
     context "When the enterprise exist" do
       it "return the id" do
@@ -57,7 +65,7 @@ RSpec.describe "Enterprises Request", type: :request do
   describe "POST /enterprises" do
     let(:valid_attributes) { { nit: "202020", address: "san lukas", mobile: "12321",
       user_id: user.id }.to_json }
-    before { post "/enterprises", params: valid_attributes, headers: headers }
+    before { post "/api/v1/enterprises", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
       it "return nit" do
@@ -71,7 +79,7 @@ RSpec.describe "Enterprises Request", type: :request do
 
     context "When the request is valid" do
       let(:valid_attributes) { { nit: "" }.to_json }
-      before { post "/enterprises", params: valid_attributes, headers: headers }
+      before { post "/api/v1/enterprises", params: valid_attributes, headers: headers }
       it "return status code 422" do
         expect(response.status).to eq(422)
       end
@@ -80,7 +88,7 @@ RSpec.describe "Enterprises Request", type: :request do
 
   describe "PUT /enterprises/:id" do
     let(:valid_attributes) { { nit: "222222" }.to_json }
-    before { put "/enterprises/#{enterprise_id}", params: valid_attributes, headers: headers }
+    before { put "/api/v1/enterprises/#{enterprise_id}", params: valid_attributes, headers: headers }
 
     context "When the request is valid" do
 
@@ -95,7 +103,7 @@ RSpec.describe "Enterprises Request", type: :request do
 
     context "When the request is invalid" do
       let(:valid_attributes) { { nit: "" }.to_json }
-      before { put "/enterprises/#{enterprise_id}", params: valid_attributes, headers: headers }
+      before { put "/api/v1/enterprises/#{enterprise_id}", params: valid_attributes, headers: headers }
 
       it "return status code 422" do
         expect(response.status).to eq(422)
@@ -103,32 +111,10 @@ RSpec.describe "Enterprises Request", type: :request do
     end
   end
 
-  describe "PUT /enterprises/:id/update_enabled" do
-    before { put "/enterprises/#{enterprise_id}/update_enabled", headers: headers }
-
-    context "When the enterprise exist" do
-      it "return the id" do
-        expect(response_body['attributes']['id']).to eq(enterprise_id)
-      end
-
-      it "return status code 200" do
-        expect(response.status).to eq(200)
-      end
-    end
-    # binding.break
-    context "When the enterprise does not exist" do
-      let(:enterprise_id) { -1 }
-
-      it "return status code 404" do
-        expect(response.status).to eq(404)
-      end
-    end
-  end
-
   # This test is for the DELETE '/route/:id' endpoint
   describe 'DELETE /enterprises/:id' do
     # Execute the DELETE request before running the test
-    before { delete "/enterprises/#{enterprise_id}", headers: headers }
+    before { delete "/api/v1/enterprises/#{enterprise_id}", headers: headers }
 
     # Test that the response has a HTTP status code of 204
     it 'returns status code 204' do

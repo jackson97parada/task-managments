@@ -6,5 +6,6 @@ FactoryBot.define do
     mobile { Faker::Number.number(digits: 10) }
     salary { Faker::Number.decimal(l_digits: 3, r_digits: 3) }
     enable { true }
-  end 
-end   
+    user
+  end
+end
